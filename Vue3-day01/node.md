@@ -1,0 +1,62 @@
+#1.vue3初步使用
+## vue的本质还是JS库
+
+####初体验引用封装好的库即可.
+#### 1.通过CDN引入
+    什么是CDN
+        通过相互链接的网络系统,
+        利用最靠近每个用户端服务器更快更可靠的将网络资源发送给用户,
+        以便提供高性能、可扩展性以及低成本的网络内容传递给用户
+####2.下载Vue的js文件手动引入
+####3.通过npm包管理工具来安装(webpack)
+####4.通过vue-cli等脚手架安装
+
+
+#### 抽离template写法
+    1.通过script标签
+    script type="x-template" id="app"
+    vueCreate({template:'#app'})
+
+    2.通过html  template标签 不会被页面渲染
+
+#### 为什么methods中声明的函数不能使用箭头函数
+    1.为什么不能使用?  
+        箭头函数是不会绑定this的,此时的this指向的上层作用域中的script标签即window, 
+        window中不能拿到data中返回的对象数据
+
+        所以只能使用普通函数,this才会根据绑定规则进行绑定
+        
+    2.不使用箭头函数的情况下,this指向的是什么
+        按照绑定规则,谁调用指向谁, 
+        但在vue中底层会通过bind函数将this动态绑定到当前实例的proxy中
+
+#2.vue3基本指令
+####复习指令
+    v-once:标签只渲染一次,不会进行更新, -- 多用于优化性能
+    v-text:更新元素的textCount 等同与{{}}
+    v-html:将文本解析成html标签
+    v-pre :不解析Mustache语法
+    v-clock:保持在元素上知道关联组件实例结束编译, -- 与css [v-clock]{display:none}配合使用,隐藏未编译Mustache标签直到组件实例准备完毕.
+    v-bind:动态绑定属性 语法糖 :style 、 :class 等
+    v-on:监听事件绑定 语法糖 @
+        修饰符:
+            @click.stop - event.stopPropagation();
+                  .prevent - 调用 event.preventDefault()。
+                  .capture - 添加事件侦听器时使用 capture 模式。
+                  .self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。
+                  .{keyAlias} - 仅当事件是从特定键触发时才触发回调。
+                  .once - 只触发一次回调。
+                  .left - 只当点击鼠标左键时触发。
+                  .right - 只当点击鼠标右键时触发。
+                  .middle - 只当点击鼠标中键时触发。
+                  .passive - { passive: true } 模式添加侦听器
+            
+    v-if、v-else、v-else-if、v-show、v-for
+        v-if与v-for可以搭配template元素使用，可以当做不可见的包裹元素，并且在v-if上使用，但是最终template不会被渲染出来
+    v-for中绑定的key用于底层判断是否使用diff算法对VNodes进行处理,以及其处理的方式
+        
+#### 数组更新检测
+    会改变原有数组
+    push、pop、shift、unshift、splice、sort、revrse
+    不会替换原有数组,而是新生成数组
+    filter、concat、slice、map

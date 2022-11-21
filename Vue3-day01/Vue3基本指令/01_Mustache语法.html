@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="app"></div>
+
+<!--抽离template-->
+<template id="my-app">
+    <div>
+        <h2 class="counter">{{counter}}</h2>
+        <button @click="incrementClick" class="increment">+1</button>
+        <button @click="decrementClick" class="decrement">-1</button>
+    </div>
+</template>
+
+<script src="../vue.js"></script>
+<script>
+    const app = Vue.createApp({
+        template: '#my-app"',
+        data:function(){
+            return {
+                counter:10,
+            }
+        },
+        methods:{
+            incrementClick(){
+                console.log(this);
+                this.counter += 1;
+            },
+            decrementClick(){
+                this.counter -=1;
+            }
+        }
+    }).mount('#app')
+
+</script>
+</body>
+</html>

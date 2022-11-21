@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="counter">0</div>
+<button class="increment">+1</button>
+<button class="decrement">-1</button>
+
+<script>
+    //获取dom
+    const counterEl = document.querySelector('.counter')
+    const incrementEl = document.querySelector('.increment')
+    const decrementEl = document.querySelector('.decrement')
+
+    //初始化counter
+    let counter = 10;
+    counterEl.innerHTML = counter;
+
+    //监听点击事件
+    incrementEl.addEventListener('click', () => {
+        counter += 1;
+        counterEl.innerHTML = counter;
+    })
+    decrementEl.addEventListener('click', () => {
+        counter -= 1;
+        counterEl.innerHTML = counter;
+    })
+</script>
+</body>
+
+</html>
