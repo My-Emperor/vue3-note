@@ -162,3 +162,47 @@
     webpack配置文件 默认为 webpack.config.js 
         否则需要使用--config指定配置文件 webpack --config name.config.js
     
+
+
+###非父子孙 组件之间共享数据
+#### provide Inject 
+    无论层级结构有多深,父组件都可以作为其所有子组件的依赖提供者
+    父组件有一个Provide选项来提供数据
+    子组件有一个inject选项来开始使用这些数据
+
+    提供的父组件、兄弟组件不能够使用provide中的数据,复杂则需要使用Vuex
+```javascript
+//father.vue
+//写法一 对象
+provide:{
+    name:'张三',
+    age:19    
+}
+//写法二 函数 需要使用到当前组件实例中的数据 如data vue底层会给provide中的this动态绑定当前组件实例对象
+provide(){
+    name:"张三", 
+    age:19,
+    length:this.names,
+}
+
+//son.vue
+inject:["name","age"]
+```
+
+###兄弟组件之间的通信
+#### mitt库全局事件总线
+    Vue3从实例中移除了$on,$off,$once方法,如果希望继续使用全局事件总线,要通过第三方的库实现
+    推荐库:mitt , tiny-emitter
+
+```javascript
+import emitter form "@/utils/eventbus.js"
+//监听事件
+created() {
+    //通过mitt对象监听事件 type:监听事件名称
+    emitter.on("why",(info)=>{
+        console.log("event",info)
+    })
+}
+//触发事件
+    emitter.emit("why",{name:'zhangsan',age:19})
+```
