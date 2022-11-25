@@ -206,3 +206,71 @@ created() {
 //触发事件
     emitter.emit("why",{name:'zhangsan',age:19})
 ```
+
+###动态组件
+    component
+```javascript
+    <component is="home">
+    
+    <component :is="currentTab">
+
+    export default{
+        data(){
+            return {
+                currentTab:"home"        
+            }       
+        },
+        component:{
+            Home
+        }
+    }   
+```
+
+###异步组件
+    常用语代码分包,优化首屏渲染速度 异步组件基于webpack分包特性
+```javascript
+
+//异步组件结合suspense使用
+<template>
+    <div>
+        App组件
+        <home></home>
+    
+        <suspense>
+            <!-- 默认插槽展示异步组件预期内容 -->
+            <template #default>
+                <async-category></async-category>
+            </template>
+
+            <!-- 回调插槽展示失败后的内容 -->
+            <template #fallback>
+                <loading></loading> 
+            </template>
+
+        </suspense>
+    </div>
+    
+</template>
+
+import {defineAsyncComponent} from "vue";
+
+import Loading from './Loading.vue'
+
+const AsyncCategory = defineAsyncComponent({
+    loader: () => import("./AsyncCategory.vue"),
+    loadingComponent: Loading,
+    //errorComponent,
+    //在显示loadingComponent组件之前,等待多长事件
+    delay:2000,
+    /**
+     * 
+     * @param err 错误信息
+     * @param retry 函数,调用retry尝试重新加载
+     * @param attempts 记录尝试的次数
+     */
+    onError:function(err,retry,attempts){
+        
+    }
+})
+```
+
