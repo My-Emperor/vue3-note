@@ -1902,7 +1902,7 @@ var Vue = (function (exports) {
         }
         const raw = comp.emits;
         let normalized = {};
-        // apply mixin/extends props
+        // apply 01_mixin和extends/extends props
         let hasExtends = false;
         if (!isFunction(comp)) {
             const extendEmits = (raw) => {
@@ -2960,7 +2960,7 @@ var Vue = (function (exports) {
         const raw = comp.props;
         const normalized = {};
         const needCastKeys = [];
-        // apply mixin/extends props
+        // apply 01_mixin和extends/extends props
         let hasExtends = false;
         if (!isFunction(comp)) {
             const extendProps = (raw) => {
@@ -4259,7 +4259,7 @@ var Vue = (function (exports) {
                     {
                         if (!context.mixins.includes(mixin)) {
                             context.mixins.push(mixin);
-                            // global mixin with props/emits de-optimizes props/emits
+                            // global 01_mixin和extends with props/emits de-optimizes props/emits
                             // normalization caching.
                             if (mixin.props || mixin.emits) {
                                 context.deopt = true;
@@ -6418,7 +6418,7 @@ var Vue = (function (exports) {
             }
             const res =
                 // local registration
-                // check instance[type] first for components with mixin or extends.
+                // check instance[type] first for components with 01_mixin和extends or extends.
                 resolve(instance[type] || Component[type], name) ||
                 // global registration
                 resolve(instance.appContext[type], name);
@@ -6957,7 +6957,7 @@ var Vue = (function (exports) {
         if (asMixin && render && instance.render === NOOP) {
             instance.render = render;
         }
-        // applyOptions is called non-as-mixin once per instance
+        // applyOptions is called non-as-01_mixin和extends once per instance
         if (!asMixin) {
             shouldCacheAccess = false;
             callSyncHook('beforeCreate', "bc" /* BEFORE_CREATE */, options, instance, globalMixins);
@@ -7239,7 +7239,7 @@ var Vue = (function (exports) {
             instance.data = reactive(data);
         }
         else {
-            // existing data: this is a mixin or extends.
+            // existing data: this is a 01_mixin和extends or extends.
             extend(instance.data, data);
         }
     }

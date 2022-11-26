@@ -1,16 +1,14 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <button @click="foo">mixin</button>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+import {demoMixin} from "@/01_mixin和extends/mixin/demoMixin";
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  mixins:[demoMixin],
+
 }
 </script>
 
