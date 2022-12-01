@@ -392,3 +392,52 @@ const AsyncCategory = defineAsyncComponent({
             watch懒执行副作用
             更具体的说明当前那个状态发生了变化,
             访问侦听状态变化前后的值
+
+    自定义指令(代码的复用和抽象主要还是通过组件)
+        当需要对DOM元素进行底层操作时可能会用到自定义指令
+        1.自定义局部指令:组件提供过directives选项,只能在当前组件使用
+        2.自定义全局指令:app的directive方法,可以在任意组件中被使用
+            demo:当某个元素挂载完成后可以自动获取焦点 v-focus
+```javascript
+export default {
+  //局部指令
+  directives:{
+    focus:{
+      //el:当前DOM实例
+      //bindings:修饰符以及参数
+      mounted(el,bindings,vnode,preVnode){
+          console.log("v-focus mounted")//自定义指令的mounted先执行 ,组件的mounted后执行
+        el.focus();
+      }  
+    }
+  }
+}
+
+//全局指令 app.vue
+const app = createApp(App);
+app.directive("focus",{
+    mounted(el,bindings,vnode,preVnode){
+        el.focus();
+    }
+})
+
+
+```
+
+    Vue生命周期
+        created(setup)
+        beforeMount
+        mounted
+        beforeUpdate
+        updated
+        beforeUnmount
+        unmounted
+
+#5.router
+    1.hash模式  
+    2.h5的history模式
+#6.vuex / pinia
+
+#7 hy-trip
+通过vite创建项目
+npm init vue@latest
