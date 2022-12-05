@@ -359,30 +359,34 @@ const AsyncCategory = defineAsyncComponent({
         const {name,age} = toRefs
     ```
     computed 返回值为ref对象
+
 ```javascript
-    setup(){
-        const firstName = ref("first")
-        const lastName = ref("last")
-        //用法1 传入getter函数
-        // const fullName = computed(() => firstName.value + '--'  + lastName.value)
-        //用法2 传入对象,对象包含getter和setter
-        const fullName = computed(() => {
-            get:() => firstName.value + '--'  + lastName.value, 
-            set(newValue){
-                 const names = newValue.split(" ");
-                 firstName.value = names[0];
-                 lastName.value = names[1];
-            }
-        })
-        const changeName = () => {
-            fullName.value = "zhang san"
+    setup()
+{
+    const firstName = ref("first")
+    const lastName = ref("last")
+    //用法1 传入getter函数
+    // const fullName = computed(() => firstName.value + '--'  + lastName.value)
+    //用法2 传入对象,对象包含getter和setter
+    const fullName = computed(() => {
+        get:() => firstName.value + '--' + lastName.value,
+            set(newValue)
+        {
+            const names = newValue.split(" ");
+            firstName.value = names[0];
+            lastName.value = names[1];
         }
-    
-        return {
-            fullName
-        }
-    }   
+    })
+    const changeName = () => {
+        fullName.value = "zhang san"
+    }
+
+    return {
+        fullName
+    }
+}   
 ```
+
     watch监听器
         watch
             特点:惰性,监听源发生变化才会执行
@@ -398,25 +402,26 @@ const AsyncCategory = defineAsyncComponent({
         1.自定义局部指令:组件提供过directives选项,只能在当前组件使用
         2.自定义全局指令:app的directive方法,可以在任意组件中被使用
             demo:当某个元素挂载完成后可以自动获取焦点 v-focus
+
 ```javascript
 export default {
-  //局部指令
-  directives:{
-    focus:{
-      //el:当前DOM实例
-      //bindings:修饰符以及参数
-      mounted(el,bindings,vnode,preVnode){
-          console.log("v-focus mounted")//自定义指令的mounted先执行 ,组件的mounted后执行
-        el.focus();
-      }  
+    //局部指令
+    directives: {
+        focus: {
+            //el:当前DOM实例
+            //bindings:修饰符以及参数
+            mounted(el, bindings, vnode, preVnode) {
+                console.log("v-focus mounted")//自定义指令的mounted先执行 ,组件的mounted后执行
+                el.focus();
+            }
+        }
     }
-  }
 }
 
 //全局指令 app.vue
 const app = createApp(App);
-app.directive("focus",{
-    mounted(el,bindings,vnode,preVnode){
+app.directive("focus", {
+    mounted(el, bindings, vnode, preVnode) {
         el.focus();
     }
 })
@@ -433,11 +438,113 @@ app.directive("focus",{
         beforeUnmount
         unmounted
 
-#5.router
+# 5.router
+
     1.hash模式  
     2.h5的history模式
-#6.vuex / pinia
 
-#7 hy-trip
-通过vite创建项目
-npm init vue@latest
+# 6.vuex / pinia
+
+state
+```javascript
+
+// app.vue
+import {useState} from '../hooks/useState'
+
+export default {
+    setup() {
+        
+        //方式为optionsApi中的mapState
+        /*
+        * computed:{
+        *   fullName(){
+        *       return "joke";
+        *   }
+        * 
+        *   ...mapState(["counter","name","age","height"])
+        * 
+        * }
+        * 
+        * */
+        
+        
+        //方式一 数组
+        const storeState = useState(["counter", "name", "age", "height"]);
+        //方式二 别名对象
+        const storeState2 = useState({
+            sCounter: state => state.counter,
+            sName: state => state.name
+        })
+        return {
+            ...storeState,
+            ...storeState2
+        }
+    }
+}
+
+// useState.js
+import {computed} from 'vue'
+import {mapState, useStore} from 'vue'
+
+export function useState(mapper) {
+    //拿到store对象
+    const store = useStore();
+
+    //获取到对应的对象fn ({name:function,age:function}) 
+    const storeStateFns = mapState(mapper)
+
+    //对数据进行转换
+    const storeState = {}
+    Object.keys(storeStateFns).forEach(fnKey => {
+        //动态将this绑定为$store
+        const fn = storeStateFns[fnKey].bind({$store: store});
+        //通过computed进行转换返回对应的值
+        storeState[fnKey] = computed(fn)
+    })
+    return storeState
+}
+
+```
+
+getter 同上
+
+mutation / action
+
+```javascript
+import { mapMutations, mapState, mapActions } from 'vuex'
+
+import { INCREMENT_N } from '../store/mutation-types'
+
+export default {
+    methods: {
+        ...mapMutations(["increment", "decrement"]),
+        ...mapMutations({
+            add: "increment"
+        }),
+        ...mapActions(["incrementAction", "decrementAction"]),
+        ...mapActions({
+          add: "incrementAction",
+          sub: "decrementAction"
+        })
+    },
+    setup() {
+        const storeMutations = mapMutations(["increment", "decrement"])
+        const actions = mapActions(["incrementAction", "decrementAction"])
+        const actions2 = mapActions({
+            add: "incrementAction",
+            sub: "decrementAction"
+        })
+        return {
+            ...storeMutations,
+            actions,
+            actions2
+        }
+    }
+}
+```
+
+# 7 hy-trip
+
+通过vite创建项目 npm init vue@latest 
+
+pinia
