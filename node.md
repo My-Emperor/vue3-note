@@ -548,3 +548,88 @@ export default {
 通过vite创建项目 npm init vue@latest 
 
 pinia
+
+# 8 Typescript
+js缺陷
+* js在es6版本之前使用var关键字关于作用域的问题
+* js的数组类型不是连续的内存空间
+* js没有类型检测机制
+
+编译 tsc
+ts环境
+
+* 1.webpack搭建ts环境
+* 2.全局安装ts-node
+
+* ts-nodd依赖 tslib @types/node 两个包
+
+`npm install ts-node -g`
+`npm install tslib @types/node -g`
+
+
+
+tm: ts-node .\hello_typescript.ts
+
+1.变量类型声明
+```typescript
+/*
+*  var没有块级作用域,不推荐使用包括在tslint中
+*  var / let / const 标识符: 数据类型(类型注解) = 赋值;
+*  
+*  string
+*  number 不区分int float double等
+*  boolean
+*  Array 
+*  Object
+*  Symbol //符号
+*  null 只有一个值null
+*  undefined 只有一个只 undefined
+*  any 任意类型 应用 类型断言 / 不想控制类型
+*  unknown 不确定类型 unknown只能赋值给any 和 unknown类型
+*  void 返回值为空 / return undefined
+*  never 永远不会发生值的类型
+*  tuple 元组 可以存放不同的数据类型,取出来的item也有明确的类型,函数中声明返回值使用最多
+* 
+* 
+* */
+//string
+let message: string = "Hello World"
+//number
+let max: number = 100;
+//boolean
+let flag: boolean = 20>10;
+
+//Array类型有两种语法
+//1.常用写法  标识符: 数据类型[] = 赋值
+//2.泛型写法  标识符: Array<类型> = 赋值
+let arr1: string[] = ["abc","cba","bca"];
+let arr2: Array<number> = [1,2,3,4,5];
+// arr1.push(123); 报错 类型错误
+
+//Object
+//type别名 
+//sex?  可选类型
+type infoObj = {name:string,age:number,sex?:string}
+const info: infoObj = {
+    name:'zhangsan',
+    age:19
+}
+//symbol
+
+const title1 = Symbol("title")
+const title2 = Symbol("title")
+
+const teacher = {
+    [title1]:"数学老师",
+    [title2]:"语文老师",
+}
+//null / undefined
+let n: null = null;
+let u: undefined = undefined;
+
+//tuple
+const infoArr:[string,number,number] = ["hello",123,456];
+const valueAge = infoArr[2];//type为number
+
+
+```
