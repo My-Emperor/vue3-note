@@ -191,21 +191,15 @@
 //father.vue
 //写法一 对象
 provide:{
-    name:'张三',
-        age
-:
-    19
+    name:'张三', 
+    age:19
 }
 //写法二 函数 需要使用到当前组件实例中的数据 如data vue底层会给provide中的this动态绑定当前组件实例对象
 provide()
 {
     name:"张三",
-        age
-:
-    19,
-        length
-:
-    this.names,
+    age:19,
+    length:this.names,
 }
 
 //son.vue
@@ -569,8 +563,8 @@ ts环境
 
 
 tm: ts-node .\hello_typescript.ts
-
-1.变量类型声明
+*** 
+###1.变量类型声明
 ```typescript
 /*
 *  var没有块级作用域,不推荐使用包括在tslint中
@@ -633,7 +627,15 @@ const valueAge = infoArr[2];//type为number
 
 
 ```
-2.语法细节
+
+TS的类型检测机制: 鸭子类型
+```typescript
+
+```
+
+*** 
+
+###2.语法细节
 * 联合类型 `|` 常用于声明多种类型
 * 交叉类型 `&` 两种(多种类型要同时满足) 常判断对象是否是子类或子接口
 * 类型别名 `type`
@@ -663,3 +665,226 @@ const valueAge = infoArr[2];//type为number
 
 4.in 判断是否有某一个属性
 
+*** 
+###3.类与面向对象
+
+```typescript
+class person {
+    name: string;
+    age: number;
+
+    constructor(name:string,age:number) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+
+```
+
+类的特性作用
+* 可以创建类对应的实例对象
+* 类本身可以作为这个实例的类型
+* 类也可以当作一个构造签名的函数
+
+类的修饰符
+* public 在任何地方可见，公有的属性或方法,默认为public
+* private 仅在同一类中可见，私有的属性或方法
+* protected 仅在类自身或子类中可见，受保护的属性与方法
+* readonly 只读属性
+
+其中private与setter  getter进行类的封装
+
+TS参数属性语法糖
+```typescript
+class Person {
+    // *底层操作1
+    // name:string;
+    // private _age:number;
+
+    //参数属性语法糖: 当属性很多时,可以使用参数属性语法糖
+    //在参数钱加上修饰符 其中底层做了两件事情
+    //*底层操作1.在类中自动声明同名同类型的属性
+    //*底层操作2.将构造形参的值传入给自动声明的属性中
+    constructor(public name: string, private _age: number) {
+        // *底层操作2
+        // this.name = name;
+        // this._age = _age;
+    }
+}
+```
+
+抽象类abstract 
+* 抽奖类不能被实例化(new)
+* 抽象类可以包含抽奖方法(也可以包含实现体方法})
+* 有抽象方法的类,必须是一个抽象类
+* 抽奖方法必须被子类重写实现,否则该继承的类必须是一个抽象类
+
+接口 interface
+* 接口可以被继承也可以实现接口implements(可以实现多个),但都必须实现接口的属性与方法(因为接口也是)
+
+接口与抽象类
+区别
+* 抽象类是事物的抽象，抽象类用来捕捉子类的通用特性，接口通常是一些行为的描述；
+* 抽象类通常用于一系列关系紧密的类之间，接口只是用来描述一个类应该具有什么行为；
+* 接口可以被多层实现，而抽象类只能单一继承；
+* 抽象类中可以有实现体，接口中只能有函数的声明；
+
+关系
+* 抽象类是对事物的抽象，表达的是 is a 的关系。猫是一种动物（动物就可以定义成一个抽象类）
+* 接口是对行为的抽象，表达的是 has a 的关系。猫拥有跑（可以定义一个单独的接口）、爬树（可以定义一个单独的接口）
+  的行为
+
+枚举 enum
+```typescript
+enum Direction{
+    //枚举类型中名称应都为大写 默认0开始一次递增
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+}
+const up:Direction = Direction.UP;
+```
+***
+###4.泛型
+```typescript
+//类型参数化
+function bar<type>(arg:type){
+    return arg
+}
+//完整写法
+const res1 = bar<number>(123)
+const res2 = bar<string>('aaa')
+const res3 = bar<{name:string}>({name:'zhangsan'});
+//省略写法 自动类型退到
+const res4 = bar(123123);
+const res5 = bar('aaaa');
+
+
+// 支持传入多个类型
+function foo<T,E>(arg1:T,arg2:E){
+    
+}
+```
+
+泛型常用名称:
+* T: type 类型
+* K、V: key、value 键值对
+* E: element 元素
+* O: Object 对象
+
+泛型接口 与 泛型类
+```typescript
+//泛型可以初始化类型
+interface IKun<T = string> {
+  name: string;
+  age: number;
+  slogan: T;
+}
+
+class Point<T = number> {
+  x: T;
+  y: T;
+
+  constructor(x:T,y:T) {
+      this.x = x;
+      this.y = y;
+  }
+}
+
+const kun1: IKun<string> = {
+  name: 'kun',
+  age: 18,
+  slogan: "哈哈哈"
+}
+const kun2: IKun<number> = {
+  name: 'kun',
+  age: 18,
+  slogan: "13213123"
+}
+```
+
+泛型约束 extends 、 keyof
+```typescript
+//泛型约束
+interface ILength{
+    length:number;
+}
+function getInfo<T extends ILength>(args:T):T{
+    return args;
+}
+const info1 = getInfo("aaaa");
+const info2 = getInfo([1,3,2,45,5]);
+const info3 = getInfo({length:100});
+
+//泛型参数约束 要求传入的key是Obj对象中的key之一
+function getObjectProperty<O,K extends keyof O>(obj:O,key:K){
+  return obj[key];
+}
+const info = {
+  name:"kun",
+  age:19,
+  height:1.99,
+}
+
+const name1 = getObjectProperty(info,"name");
+// const name2 = getObjectProperty(info,"address");//报错
+
+// keyof ------------------
+interface IKun{
+  name:string,
+  age:number
+}
+//keyof 获取对象中的所有key并生成联合类型返回
+type IKunKeys = keyof IKun;
+//IKunKeys: "name"|"age"
+
+```
+映射类型
+```typescript
+type MapPerson<T> = {
+    [property in keyof T]: T[property]
+}
+interface IPerson {
+    name:string;
+    age:number;
+}
+type newPerson = MapPerson<IPerson>;
+```
+映射修饰符
+```typescript
+type MapPerson<T> = {
+    // [property in keyof T]: T[property]
+
+    //使用修饰符 默认符号 +
+    //+号 添加修饰符
+    //-号 删除修饰符
+
+    //属性即是只读的(readonly) 也是可选类型?
+    // +readonly [property in keyof T]+?: T[property]
+    // readonly [property in keyof T]?: T[property]
+
+    //-号 删除属性中的readonly只读与可选类型?
+    -readonly [property in keyof T]-?: T[property]
+}
+
+interface IPerson {
+    name:string;
+    readonly age:number;
+    height?:number
+}
+
+type newPerson = MapPerson<IPerson>
+
+const obj:newPerson = {
+    name:'zhangsan',
+    age:19,
+    height:1.75
+};
+```
+
+类型体操github
+
+https://github.com/type-challenges/type-challenges
+https://ghaiklor.github.io/type-challenges-solutions/en/
