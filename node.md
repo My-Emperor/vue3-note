@@ -888,3 +888,18 @@ const obj:newPerson = {
 
 https://github.com/type-challenges/type-challenges
 https://ghaiklor.github.io/type-challenges-solutions/en/
+
+*** 
+###5.tsconfig.json配置文件
+
+[tsconfig.js配置文档](https://www.typescriptlang.org/tsconfig)
+
+寻找指定配置,在地址后加锚点(如:target) https://www.typescriptlang.org/tsconfig#target
+
+初始化生成 tsc --init
+
+手动编译时直接tsc 打包所有ts文件为js，tsc指定文件时,tsconfig.json文件会被忽略
+
+
+###6.ts封装axios
+
