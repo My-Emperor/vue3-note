@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "mitt": "^3.0.0"
+    "mitt": "^3.0.0",
+    "normalize.css": "^8.0.1",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "less": "^4.1.3"
   }
 }

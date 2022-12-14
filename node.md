@@ -438,7 +438,7 @@ app.directive("focus", {
     2.h5的history模式
 
 # 6.vuex / pinia
-
+###vuex
 state
 ```javascript
 
@@ -504,6 +504,67 @@ getter 同上
 
 mutation / action
 
+###pinia
+pinia更符合vue3 componentAPI
+
+npm install pinia
+```txt
+-- stores
+  - counter.js (vuex -> state) //用于保存状态
+  - index.js 
+```
+
+```javascript
+//stores/index.js
+import {createPinia} from "pinia"
+const pinia = createPinia();
+export default pinia
+```
+
+
+```javascript
+//counter.js
+//导入pinia
+
+store
+
+import { defineStore } from 'pinia'
+
+//通过defineStore创建需要共享的数据
+// defineStore(key,data) : fn
+const useCounter = defineStore("counter",{
+    // state(){
+    //     return {
+    //         count:99
+    //     }
+    // }
+  state : () => ({
+    count:99
+  })
+})
+
+export default useCounter;
+```
+
+```vue
+//App.vue
+<template>
+  <div class="home">
+    <h2>count:{{counterStore.count}}</h2>
+  </div>
+</template>
+<script setup>
+import useCounter from "@/stores/counter";
+import {toRef} from "vue";
+import {storeToRefs} from "pinia";
+
+const counterStore = useCounter;
+//可以进行结构但需要经过toRefs或者 pinia提供的storeTorefs进行处理才是响应式的
+// const { count } = toRef(counterStore);
+const { count } = storeToRefs(counterStore);
+</script>
+```
+
 ```javascript
 import { mapMutations, mapState, mapActions } from 'vuex'
 
@@ -539,9 +600,9 @@ export default {
 
 # 7 hy-trip
 
-通过vite创建项目 npm init vue@latest 
-
+通过vite创建项目 npm init vue@latest
 pinia
+
 
 # 8 Typescript
 js缺陷
