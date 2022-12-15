@@ -1,14 +1,20 @@
 <template>
   <div class="login">
-    <h2>login</h2>
-    <button @click="onLogin">登录</button>
+    <login-panel></login-panel>
   </div>
 </template>
 
 <script setup lang="ts">
-import hyRequest from '@/service/index'
-
-function onLogin() {}
+import LoginPanel from '@/views/login/cpns/login-panel.vue'
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/image/login-bg.svg');
+}
+</style>
