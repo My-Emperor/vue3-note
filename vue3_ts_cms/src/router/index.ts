@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { localCache } from "@/uitls/cache";
+import { ElMessage } from "element-plus";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -22,5 +24,13 @@ const router = createRouter({
   ]
 })
 
-export default router
+router.beforeEach((to) => {
+  //判断是否携带token
+  const token = localCache.getCache('LOGIN_TOKEN')
+  if (to.path.startsWith('/main') && !token) {
+    ElMessage.warning('请先登录!')
+    return '/login'
+  }
+})
 
+export default router

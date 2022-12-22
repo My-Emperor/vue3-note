@@ -24,10 +24,14 @@ import { ElMessage } from 'element-plus'
 import type { IAccount } from '@/types/login_types'
 import type { FormRules, ElForm } from 'element-plus'
 import useLoginStore from '@/store/login/login'
+import { localCache } from '@/uitls/cache'
+
+const CACHE_NAME = 'name'
+const CACHE_PASSWORD = 'password'
 
 const account = reactive<IAccount>({
-  name: '',
-  password: ''
+  name: localCache.getCache(CACHE_NAME) ?? '',
+  password: localCache.getCache(CACHE_PASSWORD) ?? ''
 })
 //表单校验规则
 const accountRules: FormRules = {
@@ -53,22 +57,25 @@ const formRef = ref<InstanceType<typeof ElForm>>()
 //获取pinia login对象
 const loginStore = useLoginStore()
 //登录逻辑
-function loginAction() {
+function loginAction(isRemPwd: boolean) {
   formRef.value?.validate((valid) => {
     if (valid) {
       //校验成功
       const name = account.name
       const password = account.password
       // 2.向服务器发送网络请求(携带账号和密码)
-      console.log(loginStore.loginAccountAction({ name, password }))
-      // loginStore
-      //   .loginAccountAction({ name, password })
-      //   .then((res) => {
-      //     console.log('请求成功!----' + res)
-      //   })
-      //   .catch((rej) => {
-      //     console.log('请求失败!----' + rej)
-      //   })
+      loginStore.loginAccountAction({ name, password }).then(() => {
+        // 3.判断是否需要记住密码
+        if (isRemPwd) {
+          localCache.setCache(CACHE_NAME, name)
+          localCache.setCache(CACHE_PASSWORD, password)
+        } else {
+          localCache.removeCache(CACHE_NAME)
+          localCache.removeCache(CACHE_PASSWORD)
+        }
+      })
+    } else {
+      ElMessage.error('请输入正确的账号密码')
     }
   })
 }

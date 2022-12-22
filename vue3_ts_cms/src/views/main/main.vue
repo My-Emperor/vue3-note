@@ -1,19 +1,21 @@
 <template>
   <div class="main">
-    <h2>Main</h2>
-    <h2>main:{{ counterStore.counter }}</h2>
-    <button @click="onChangeCounter">修改</button>
+    <h2>首页</h2>
+    <button @click="signOut">退出</button>
     <el-button></el-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import useCounterStore from '@/store/counter'
-const counterStore = useCounterStore()
+import { localCache } from '@/uitls/cache'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
-function onChangeCounter() {
-  counterStore.changeCounterAction(111)
-  console.log(counterStore.counter)
+const router = useRouter()
+function signOut() {
+  localCache.removeCache('LOGIN_TOKEN')
+  router.push('/login')
+  ElMessage.success('退出成功!')
 }
 </script>
 
